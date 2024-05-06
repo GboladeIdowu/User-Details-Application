@@ -1,37 +1,35 @@
+document.getElementById('userDetailsForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
-    function registerUser() {
-    const firstName = document.getElementById('firstName').value;
-    const lastName = document.getElementById('lastName').value;
-    const email = document.getElementById('email').value;
-    const password = document.getElementById('password').value;
+    // Collect form data
+    const formData = new FormData(this);
 
-    const userData = {
-    firstName: firstName,
-    lastName: lastName,
-    email: email,
-    password: password
-};
+    // Convert form data to JSON
+    const jsonData = {};
+    formData.forEach((value, key) => {
+        jsonData[key] = value;
+    });
 
-    fetch('http://localhost:8080/api/user', {
-    method: 'POST',
-    headers: {
-    'Content-Type': 'application/json',
-},
-    body: JSON.stringify(userData),
-})
-    .then(response => {
-    if (!response.ok) {
-    throw new Error('Network response was not ok');
-}
-    return response.json();
-})
-    .then(data => {
-    console.log('Success:', data);
-    alert('Registration successful!');
-    // Redirect or perform any other action upon successful registration
-})
-    .catch(error => {
-    console.error('Error:', error);
-    alert('Registration failed. Please try again later.');
+    // Send data to backend using fetch API
+    fetch('http://localhost:5000/api/user/add', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(jsonData)
+    })
+        .then(response => {
+            if (response.ok) {
+                // Show success message
+                alert('User details submitted successfully!');
+            } else {
+                // Show error message
+                alert('Failed to submit user details. Please try again.');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            // Show error message
+            alert('Failed to submit user details. Please try again.');
+        });
 });
-}

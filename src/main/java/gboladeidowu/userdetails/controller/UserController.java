@@ -26,7 +26,7 @@ public class UserController {
         return userRepository.findById(email);
     }
 
-    @PostMapping
+    @PostMapping("add")
     public UserDetails userDetails(@RequestBody UserDetails userDetails) {
         if (userRepository.existsById(userDetails.getEmail())) {
             throw new IllegalStateException("Email taken!");
